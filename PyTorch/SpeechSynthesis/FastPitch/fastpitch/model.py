@@ -288,7 +288,11 @@ class FastPitch(nn.Module):
         # Viterbi --> durations
         attn_hard_dur = attn_hard.sum(2)[:, 0, :]
         dur_tgt = attn_hard_dur
-        assert torch.all(torch.eq(dur_tgt.sum(dim=1), mel_lens))
+        try:
+            assert torch.all(torch.eq(dur_tgt.sum(dim=1), mel_lens))
+        except AssertionError:
+             print('AssertionError while processing {}'.format(audiopaths))
+             exit(1)
 
         # Average pitch over characters
         pitch_tgt = average_pitch(pitch_dense, dur_tgt)
