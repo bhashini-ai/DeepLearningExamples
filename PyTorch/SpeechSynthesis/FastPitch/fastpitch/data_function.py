@@ -253,7 +253,7 @@ class TTSDataset(torch.utils.data.Dataset):
 
     def get_text(self, text):
         text = self.tp.encode_text(text)
-        space = [self.tp.encode_text("A A")[1]]
+        space = [self.tp.encode_text("? ?")[1]]
 
         if self.prepend_space_to_text:
             text = space + text
