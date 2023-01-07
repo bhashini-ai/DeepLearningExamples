@@ -12,6 +12,8 @@ export TORCH_CUDNN_V8_API_ENABLED=1
 : ${REPEATS:=1}
 : ${CPU:=false}
 : ${PHONE:=true}
+: ${TEXT_CLEANERS:="basic_cleaners"}
+: ${SYMBOL_SET:="english_basic"}
 
 # Paths to pre-trained models downloadable from NVIDIA NGC (LJSpeech-1.1)
 FASTPITCH_LJ="pretrained_models/fastpitch/nvidia_fastpitch_210824.pt"
@@ -63,6 +65,8 @@ ARGS+=" -o $OUTPUT_DIR"
 ARGS+=" --log-file $LOG_FILE"
 ARGS+=" --batch-size $BATCH_SIZE"
 ARGS+=" --denoising-strength $DENOISING"
+ARGS+=" --text-cleaners $TEXT_CLEANERS"
+ARGS+=" --symbol-set $SYMBOL_SET"
 ARGS+=" --warmup-steps $WARMUP"
 ARGS+=" --repeats $REPEATS"
 ARGS+=" --speaker $SPEAKER"

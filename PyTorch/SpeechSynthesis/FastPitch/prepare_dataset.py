@@ -77,6 +77,11 @@ def parse_args(parser):
     # Performance
     parser.add_argument('-b', '--batch-size', default=1, type=int)
     parser.add_argument('--n-workers', type=int, default=16)
+    parser.add_argument('--text-cleaners', nargs='*',
+                      default=['basic_cleaners'], type=str,
+                      help='Type of text cleaners for input text')
+    parser.add_argument('--symbol-set', type=str, default='english_basic',
+                      help='Define symbol set for input text')
     return parser
 
 
@@ -109,7 +114,8 @@ def main():
         dataset = TTSDataset(
             args.dataset_path,
             filelist,
-            text_cleaners=['english_cleaners_v2'],
+            text_cleaners=args.text_cleaners,
+            symbol_set=args.symbol_set,
             n_mel_channels=args.n_mel_channels,
             p_arpabet=0.0,
             n_speakers=args.n_speakers,
