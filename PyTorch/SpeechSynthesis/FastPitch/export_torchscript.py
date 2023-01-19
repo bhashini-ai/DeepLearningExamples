@@ -27,7 +27,7 @@
 
 import argparse
 import torch
-from inference import load_and_setup_model
+from models import load_and_setup_model
 
 
 def parse_args(parser):
@@ -39,17 +39,21 @@ def parse_args(parser):
                         help='filename for the Tacotron 2 TorchScript model')
     parser.add_argument('--amp', action='store_true',
                         help='inference with AMP')
+    parser.add_argument('--symbol-set', type=str, default='english_basic',
+                                 help='Define symbol set for input text')
+    parser.add_argument('--n-speakers', type=int, default=1,
+                      help='Number of speakers in the model.')
     return parser
 
 
 def main():
     parser = argparse.ArgumentParser(description='Export models to TorchScript')
     parser = parse_args(parser)
-    args = parser.parse_args()
+    args, unk_args = parser.parse_known_args()
 
     model = load_and_setup_model(
         args.generator_name, parser, args.generator_checkpoint,
-        args.amp, device='cpu', forward_is_infer=True, polyak=False,
+        args.amp, device='cpu', unk_args=unk_args, forward_is_infer=True,
         jitable=True)
     
     torch.jit.save(torch.jit.script(model), args.output)

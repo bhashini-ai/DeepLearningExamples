@@ -65,7 +65,7 @@ def main():
                                                      device)
     else:
         assert args.load_from == 'pyt'
-        pyt_model, _ = models.load_pyt_model_for_infer(
+        pyt_model, _ = models.load_and_setup_model(
             args.model_name, parser, args.input_ckpt, args.amp, device,
             unk_args=unk_args, jitable=True)
         ts_model = torch.jit.script(pyt_model)
