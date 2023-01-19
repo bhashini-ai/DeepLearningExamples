@@ -80,8 +80,9 @@ def parse_args(parser):
     parser.add_argument('--text-cleaners', nargs='*',
                       default=['basic_cleaners'], type=str,
                       help='Type of text cleaners for input text')
-    parser.add_argument('--symbol-set', type=str, default='english_basic',
-                      help='Define symbol set for input text')
+    # Language
+    parser.add_argument('--symbol_set', default='english_basic',
+                        help='Symbols in the dataset')
     return parser
 
 
@@ -106,7 +107,7 @@ def main():
 
     if args.save_alignment_priors:
         Path(args.dataset_path, 'alignment_priors').mkdir(parents=False, exist_ok=True)
-
+        
     for filelist in args.wav_text_filelists:
 
         print(f'Processing {filelist}...')
@@ -115,8 +116,8 @@ def main():
             args.dataset_path,
             filelist,
             text_cleaners=args.text_cleaners,
-            symbol_set=args.symbol_set,
             n_mel_channels=args.n_mel_channels,
+            symbol_set=args.symbol_set,
             p_arpabet=0.0,
             n_speakers=args.n_speakers,
             load_mel_from_disk=False,
