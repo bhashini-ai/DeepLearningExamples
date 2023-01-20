@@ -22,12 +22,12 @@ def parse_args(parser):
     """
     Parse commandline arguments.
     """
-    parser.add_argument('model_name', type=str,
+    parser.add_argument('--model_name', type=str,
                         choices=['HiFi-GAN', 'FastPitch'],
                         help='Name of the converted model')
-    parser.add_argument('input_ckpt', type=str,
+    parser.add_argument('--input_ckpt', type=str,
                         help='Path to the input checkpoint')
-    parser.add_argument('output_ckpt', default=None,
+    parser.add_argument('--output_ckpt', default=None,
                         help='Path to save the output checkpoint to')
     parser.add_argument('--cuda', action='store_true',
                         help='Move model weights to GPU before export')
