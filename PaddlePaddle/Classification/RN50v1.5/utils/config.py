@@ -276,7 +276,10 @@ def add_advance_args(parser):
         '--use-pure-fp16',
         action='store_true',
         help='Enable pure FP16 training, only be applied when --amp is set.')
-
+    group.add_argument(
+        '--fuse-resunit',
+        action='store_true',
+        help='Enable CUDNNv8 ResUnit fusion, only be applied when --amp is set.')
     # ASP
     group.add_argument(
         '--asp',
@@ -447,6 +450,12 @@ def add_training_args(parser):
 def add_trt_args(parser):
     group = parser.add_argument_group('Paddle-TRT')
     group.add_argument(
+        '--device',
+        type=int,
+        default='0',
+        help='The GPU device id for Paddle-TRT inference.'
+    )
+    group.add_argument(
         '--trt-inference-dir',
         type=str,
         default='./inference',
@@ -491,7 +500,7 @@ def add_trt_args(parser):
         default='./inference.json',
         help='A file in which to store JSON inference report.')
     group.add_argument(
-        '--trt-use-synthat',
+        '--trt-use-synthetic',
         type=distutils.util.strtobool,
         default=False,
         help='Apply synthetic data for benchmark.')
