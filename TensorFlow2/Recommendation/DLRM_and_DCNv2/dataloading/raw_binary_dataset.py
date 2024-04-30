@@ -67,12 +67,14 @@ class TfRawBinaryDataset:
             numerical_features_enabled: bool = False,
             rank: int = 0,
             world_size: int = 1,
-            concat_features: bool = False
+            concat_features: bool = False,
+            data_parallel_categoricals = False,
     ):
 
         self._concat_features = concat_features
         self._feature_spec = feature_spec
         self._batch_size = batch_size
+        self._data_parallel_categoricals = data_parallel_categoricals
 
         local_batch_size = int(batch_size / world_size)
         batch_sizes_per_gpu = [local_batch_size] * world_size
@@ -135,7 +137,7 @@ class TfRawBinaryDataset:
             elif first_feature in set_of_label_features:
                 # Load label
                 # We verified earlier that there is only one label feature
-                label_bytes_per_batch = np.dtype(np.bool).itemsize * self._batch_size
+                label_bytes_per_batch = np.dtype(bool).itemsize * self._batch_size
                 self._label, batches = create_reader(path_to_open, label_bytes_per_batch)
             else:
                 raise ValueError("Unknown chunk type")
@@ -180,6 +182,8 @@ class TfRawBinaryDataset:
                 feature = tf.cast(feature, dtype=tf.int32)
                 feature = tf.expand_dims(feature, axis=1)
                 feature = tf.reshape(feature, [self._batch_size, 1])
+                if self._data_parallel_categoricals:
+                    feature = feature[self.dp_begin_idx:self.dp_end_idx]
                 cat_data.append(feature)
             if self._concat_features:
                 cat_data = tf.concat(cat_data, axis=1)
@@ -227,7 +231,7 @@ class TfRawBinaryDataset:
                     raw_data = feature.numpy().astype(ftype).tobytes()
                     stream.write(raw_data)
 
-                label_f.write(label.numpy().astype(np.bool).tobytes())
+                label_f.write(label.numpy().astype(bool).tobytes())
                 numerical_f.write(numerical_features.numpy().astype(np.float16).tobytes())
 
             for stream in chain(*categorical_fs, [label_f, numerical_f]):
