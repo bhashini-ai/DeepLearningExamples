@@ -81,7 +81,7 @@ def parse_args(parser):
                       default=['basic_cleaners'], type=str,
                       help='Type of text cleaners for input text')
     # Language
-    parser.add_argument('--symbol_set', default='english_basic',
+    parser.add_argument('--symbol-set', default='english_basic',
                         help='Symbols in the dataset')
     return parser
 
