@@ -274,7 +274,11 @@ class FastPitch(nn.Module):
         attn_hard_dur = attn_hard.sum(2)[:, 0, :]
         dur_tgt = attn_hard_dur
 
-        assert torch.all(torch.eq(dur_tgt.sum(dim=1), mel_lens))
+        try:
+            assert torch.all(torch.eq(dur_tgt.sum(dim=1), mel_lens))
+        except AssertionError:
+            print('AssertionError while processing {}'.format(audiopaths))
+            exit(1)
 
         # Predict durations
         log_dur_pred = self.duration_predictor(enc_out, enc_mask).squeeze(-1)

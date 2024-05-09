@@ -31,6 +31,61 @@ def get_symbols(symbol_set='english_basic'):
         _accented = 'áçéêëñöøćž'
         _letters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz'
         symbols = list(_punctuation + _math + _special + _accented + _letters) + _arpabet
+    elif symbol_set == 'kannada':
+        _pad = '_'
+        _punctuation = '!\'"(),.:;? '
+        _special = '-'
+        _letters = 'ಂಃ಼ಾಿೀುೂೃೄೢೣೆೇೈೊೋೌ್ಅಆಇಈಉಊಋೠಌೡಎಏಐಒಓಔಕಖಗಘಙಚಛಜಝಞಟಠಡಢಣತಥದಧನಪಫಬಭಮಯರಱಲಳೞವಶಷಸಹಽ'
+        symbols = list(_pad + _special + _punctuation + _letters)
+    elif symbol_set == 'telugu':
+        _pad = '_'
+        _punctuation = '!\'"(),.:;? '
+        _special = '-'
+        _letters = 'ఀఁంఃాిీుూృౄౢౣెేైొోౌ్అఆఇఈఉఊఋౠఌౡఎఏఐఒఓఔకఖగఘఙచఛజఝఞటఠడఢణతథదధనపఫబభమమయరఱలళఴవశషసహఽ'
+        symbols = list(_pad + _special + _punctuation + _letters)
+    elif symbol_set == 'tamil':
+        _pad = '_'
+        _punctuation = '!\'"(),.:;? '
+        _special = '-'
+        _letters = 'ஂஃாிீுூெேைொோௌ்ௐௗஅஆஇஈஉஊஎஏஐஒஓஔகஙசஜஞடணதநனபமயரறலளழவஶஷஸஹ'
+        symbols = list(_pad + _special + _punctuation + _letters)
+    elif symbol_set == 'malayalam':
+        _pad = '_'
+        _punctuation = '!\'"(),.:;? '
+        _special = '-'
+        _letters = 'ംഃാിീുൂൃെേൈൊോൌ്ൗഅആഇഈഉഊഋഎഏഐഒഓഔകഖഗഘങചഛജഝഞടഠഡഢണതഥദധനപഫബഭമയരറലളഴവശഷസഹ'
+        symbols = list(_pad + _special + _punctuation + _letters)
+    elif symbol_set == 'marathi':
+        _pad = '_'
+        _punctuation = '!\'"(),.:;? '
+        _special = '-'
+        _letters = 'ँंःािीुूृेैोौॅॉ्अआइईउऊऋएऐओऔॲऑकखगघङचछजझञटठडढणतथदधनपफबभमयरलळवशषसहऽॐ।॥़ऍज़फ़य़ऱ'
+        symbols = list(_pad + _special + _punctuation + _letters)
+    elif symbol_set == 'hindi':
+        _pad = '_'
+        _punctuation = '!\'"(),.:;? '
+        _special = '-'
+        _letters = 'ँंः़ािीुूृॅेैॉोौ्अआइईउऊऋऍएऐऑओऔकखगघङचछजझञटठडढणतथदधनपफबभमयरलळवशषसहक़ख़ग़ज़ड़ढ़फ़'
+        # ignored 'ऀॄॢॣॆॊऺऻॏ॒॑ॖॗॕऄॠऌॡऎऒऩऱऴऽॐय़।॥ॲॳॴॵॶॷॸॹॺॻॼॽॾॿ'
+        symbols = list(_pad + _special + _punctuation + _letters)
+    elif symbol_set == 'bengali':
+        _pad = '_'
+        _punctuation = '!\'"(),.:;? '
+        _special = '-'
+        _letters = 'ঁংঃ়ািীুূৃেৈোৌ্অআইঈউঊঋএঐওঔকখগঘঙচছজঝঞটঠডঢণতথদধনপফবভমযরলশষসহৎৗড়ঢ়য়'
+        symbols = list(_pad + _special + _punctuation + _letters)
+    elif symbol_set == 'english_mandarin_basic':
+        from .zh.chinese import chinese_punctuations, valid_symbols as mandarin_valid_symbols
+
+        # Prepend "#" to mandarin phonemes to ensure uniqueness (some are the same as uppercase letters):
+        _mandarin_phonemes = ['#' + s for s in mandarin_valid_symbols]
+
+        _pad = '_'
+        _punctuation = '!\'(),.:;? '
+        _chinese_punctuation = ["#" + p for p in chinese_punctuations]
+        _special = '-'
+        _letters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz'
+        symbols = list(_pad + _special + _punctuation + _letters) + _arpabet + _mandarin_phonemes + _chinese_punctuation
     else:
         raise Exception("{} symbol set does not exist".format(symbol_set))
 
@@ -38,7 +93,7 @@ def get_symbols(symbol_set='english_basic'):
 
 
 def get_pad_idx(symbol_set='english_basic'):
-    if symbol_set in {'english_basic', 'english_basic_lowercase'}:
+    if symbol_set in {'english_basic', 'english_basic_lowercase', 'english_mandarin_basic', 'kannada', 'telugu', 'tamil', 'malayalam', 'marathi', 'hindi', 'bengali'}:
         return 0
     else:
         raise Exception("{} symbol set not used yet".format(symbol_set))
